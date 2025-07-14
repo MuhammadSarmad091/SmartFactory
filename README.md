@@ -1,10 +1,5 @@
 
 # Digital Twin Smart Factory 🚀🏭
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)  
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]  
-[![Coverage Status](https://img.shields.io/badge/coverage-—%25-lightgrey.svg)]
-
 A comprehensive Digital Twin system for simulating, monitoring, and predicting the behavior of a smart factory using cutting‑edge 3D visualization, real‑time web technologies, and AI.
 
 ---
