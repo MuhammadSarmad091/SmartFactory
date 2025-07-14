@@ -1,89 +1,177 @@
-🏭 Digital Twin Smart Factory
-A comprehensive Digital Twin system for simulating, monitoring, and predicting the behavior of a smart factory using cutting-edge web technologies, 3D visualization, and AI.
+````markdown
+# Digital Twin Smart Factory 🚀🏭
 
-🔍 Overview
-This project aims to build a Digital Twin of a smart factory that offers:
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)  
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]  
+[![Coverage Status](https://img.shields.io/badge/coverage-—%25-lightgrey.svg)]
 
-3D factory visualization using Unity
+A comprehensive Digital Twin system for simulating, monitoring, and predicting the behavior of a smart factory using cutting‑edge 3D visualization, real‑time web technologies, and AI.
 
-Real-time monitoring of machine status via a MERN stack web application
+---
 
-AI-based fault and maintenance prediction for factory machines
+## Table of Contents
 
-IoT data simulation using Node-RED and Python
+- [Overview](#overview)
+- [Architecture](#architecture)
+- [Tech Stack](#tech-stack)
+- [Features](#features)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Running the Services](#running-the-services)
+- [Folder Structure](#folder-structure)
+- [Future Enhancements](#future-enhancements)
+- [Contributing](#contributing)
+- [License](#license)
 
-RESTful APIs served through FASTAPI for AI model integration
+---
 
-🧱 Project Architecture
-sql
-Copy
-Edit
-+----------------+     POST sensor data     +---------------------+
-| Node-RED /     |  ----------------------> |     Express.js API   |
-| Python Script  |                          |   (Backend - MERN)   |
-+----------------+                          +----------+----------+
-                                                      |
-                                                      v
-                                      +-------------------------------+
-                                      |         MongoDB Atlas         |
-                                      +-------------------------------+
-                                                      |
-                                                      v
-                          +---------------------+     GET state     +----------------+
-                          |     React Web App   | <---------------- |  Express.js    |
-                          |  (Monitoring Panel) |                  |  Backend API   |
-                          +---------------------+                  +----------------+
-                                     |
-                                     | Fetch metadata & control data
-                                     v
-                        +------------------------------+
-                        |    Unity 3D Digital Twin     |
-                        |  (WebGL Embedded in React)   |
-                        +------------------------------+
+## Overview
 
-🔧 Tech Stack
-🎮 Unity (WebGL Build)
-3D model of the factory floor and machines
+This project builds a **Digital Twin** of a smart factory, featuring:
 
-Clickable/interactable components
+- **3D Visualization** of factory floor & machines using Unity (WebGL)
+- **Real‑time Monitoring** and control via a MERN‑stack dashboard
+- **AI‑driven** fault & maintenance prediction
+- **Simulated IoT** sensor data using Node‑RED / Python
+- **RESTful APIs** for AI model integration via FastAPI
 
-Embedded in React using iframe or custom loader
+---
 
-🌐 MERN Stack Web App
-MongoDB: Stores machine metadata and status logs
+## Architecture
 
-Express.js: Backend API to receive & serve sensor/machine data
+```text
+Node-RED / Python Simulator → Express.js API (MERN Backend) → MongoDB Atlas
+                                 ↓                       ↑
+                         React Dashboard ←───────────────
+                                 ↑                       ↓
+                     Unity 3D Digital Twin (WebGL)     FastAPI + AI Models
+````
 
-React.js: Interactive dashboard with real-time updates
+---
 
-Node.js: Server runtime
+## Tech Stack
 
-🧠 AI/ML Models
-Built with Python (e.g., Scikit-learn, XGBoost, etc.)
+* **Unity (WebGL)** – Interactive 3D factory & machine models
+* **MongoDB Atlas** – Stores machine metadata & status logs
+* **Express.js / Node.js** – Backend API for data ingestion & serving
+* **React.js** – Real‑time dashboard & Unity WebGL integration
+* **Node‑RED / Python** – IoT sensor data simulation
+* **FastAPI** – REST API wrapping ML models
+* **Python** (Scikit‑learn, XGBoost) – Fault & maintenance prediction
 
-Predicts:
+---
 
-Machine failure likelihood
+## Features
 
-Recommended maintenance schedule
+* 📡 **Simulated IoT Inputs** – Realistic sensor flows (temperature, vibration, RPM)
+* 🌍 **Interactive Digital Twin** – WebGL 3D model synced with live data
+* 📊 **Live Dashboard** – Machine status, logs, analytics & alerts
+* 🤖 **AI Predictions** – Early fault detection & maintenance scheduling
+* 🔌 **Modular APIs** – Clear separation between simulator, backend, frontend & AI
 
-Exposed via FASTAPI
+---
 
-🔄 IoT Data Simulation
-Node-RED or Python script used to:
+## Getting Started
 
-Generate realistic sensor data (temperature, RPM, vibration, etc.)
+### Prerequisites
 
-Send data to backend at regular intervals
+* Node.js (v16 or higher)
+* npm or yarn
+* Python (v3.8 or higher)
+* Unity Editor (for WebGL build)
 
-🚀 Features
-📡 Simulated IoT Inputs: Emulate factory sensors through custom flows and scripts
+### Installation
 
-🌍 Real-Time Digital Twin: WebGL-based interactive 3D model synced with backend data
+```bash
+# Clone the repository
+git clone https://github.com/<your-username>/digital-twin-smart-factory.git
+cd digital-twin-smart-factory
+```
 
-📊 Live Dashboard: Monitor status, logs, and analytics of each machine
+Create `.env` files in the following directories and add your environment variables:
 
-🧠 Smart Predictions: Fault and maintenance predictions via integrated AI models
+* `server/.env`
+* `ai-model/.env`
 
-🔌 REST APIs: Clean modular API integration for AI and frontend/backend communication
+### Running the Services
 
+1. **Express.js Backend**
+
+   ```bash
+   cd server
+   npm install
+   npm start
+   ```
+2. **React Frontend**
+
+   ```bash
+   cd client
+   npm install
+   npm start
+   ```
+3. **FastAPI AI Server**
+
+   ```bash
+   cd ai-model
+   pip install -r requirements.txt
+   uvicorn main:app --reload --host 0.0.0.0 --port 8000
+   ```
+4. **IoT Simulator**
+
+   * **Node‑RED**: Import `simulation/flow.json` and run
+   * **Python**:
+
+     ```bash
+     cd simulation
+     python simulate.py
+     ```
+5. **Unity WebGL Build**
+
+   * Export the Unity project as a WebGL build
+   * Copy build output into `client/public/unity/`
+   * The React app will automatically load it
+
+---
+
+## Folder Structure
+
+```
+digital-twin-smart-factory/
+├── client/           # React frontend
+│   └── public/unity/ # Unity WebGL build assets
+├── server/           # Express.js backend
+├── ai-model/         # FastAPI server & ML models
+├── simulation/       # Node‑RED flows & Python scripts
+└── unity/            # Unity project source
+```
+
+---
+
+## Future Enhancements
+
+* Integrate an **MQTT Broker** for real-world IoT devices
+* Enable **remote control** commands from dashboard to Unity
+* Add **advanced analytics** with Grafana or Plotly
+* Implement **WebSocket** for bi-directional real-time updates
+
+---
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/YourFeature`)
+3. Commit your changes (`git commit -m "Add YourFeature"`)
+4. Push to the branch (`git push origin feature/YourFeature`)
+5. Open a Pull Request
+
+Please review the [Code of Conduct](CODE_OF_CONDUCT.md) before contributing.
+
+---
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+```
+```
