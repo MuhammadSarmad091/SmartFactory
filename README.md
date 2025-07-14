@@ -1,4 +1,4 @@
-````markdown
+
 # Digital Twin Smart Factory 🚀🏭
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)  
@@ -40,15 +40,7 @@ This project builds a **Digital Twin** of a smart factory, featuring:
 
 ## Architecture
 
-```text
-Node-RED / Python Simulator → Express.js API (MERN Backend) → MongoDB Atlas
-                                 ↓                       ↑
-                         React Dashboard ←───────────────
-                                 ↑                       ↓
-                     Unity 3D Digital Twin (WebGL)     FastAPI + AI Models
-````
 
----
 
 ## Tech Stack
 
