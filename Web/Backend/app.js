@@ -1,19 +1,3 @@
-// File Structure:
-// ├── app.js
-// ├── routes/
-// │   ├── index.js
-// │   ├── users.js
-// │   └── auth.js     <-- JWT login route here
-// ├── models/
-// │   └── User.js     <-- Mongoose User model
-// ├── middleware/
-// │   └── auth.js     <-- JWT auth middleware
-// ├── .env            <-- Store MONGO_URI and JWT_SECRET
-// ├── package.json
-
-//----------------------------------------
-// app.js
-//----------------------------------------
 require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
@@ -23,6 +7,8 @@ var logger = require('morgan');
 const mongoose = require('mongoose');
 
 var authRouter = require('./routes/auth');
+var sensorDataRouter = require('./routes/sensorData');
+var transactionsRouter = require('./routes/transactions')
 
 var app = express();
 
@@ -38,25 +24,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/auth', authRouter);
+app.use('/sensorData', sensorDataRouter);
+app.use('/tx',transactionsRouter)
 
 
 module.exports = app;
 
-
-
-
-
-
-
-//----------------------------------------
-// Example usage of auth middleware (in routes/users.js)
-//----------------------------------------
-const express = require('express');
-const router = express.Router();
-const authenticateToken = require('../middleware/auth');
-
-router.get('/profile', authenticateToken, (req, res) => {
-  res.json({ message: `Hello ${req.user.username}` });
-});
-
-module.exports = router;
