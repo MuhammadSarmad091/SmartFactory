@@ -22,8 +22,6 @@ const machineSchema = new mongoose.Schema({
 const staticDataSchema = new mongoose.Schema({
   rooms:    { type: [roomSchema],    default: [] },
   machines: { type: [machineSchema], default: [] }
-}, {
-  timestamps: true
 });
 
 module.exports = mongoose.model('StaticData', staticDataSchema);
