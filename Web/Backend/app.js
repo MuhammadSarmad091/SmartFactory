@@ -10,6 +10,7 @@ var authRouter = require('./routes/auth');
 var sensorDataRouter = require('./routes/sensorData');
 var transactionsRouter = require('./routes/transactions')
 
+
 var app = express();
 
 mongoose.connect(process.env.MONGO_URI, {
