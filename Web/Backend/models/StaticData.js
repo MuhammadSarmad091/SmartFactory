@@ -2,8 +2,12 @@
 const mongoose = require('mongoose');
 
 const roomSchema = new mongoose.Schema({
-  light_1: { type: Boolean, required: true, default: false },
-  light_2: { type: Boolean, required: true, default: false }
+  // An array of light states (true = on, false = off)
+  lights: {
+    type: [Boolean],
+    required: true,
+    default: []          // you can initialize with [false, false] if you always have two lights
+  }
 }, { _id: false });
 
 const machineSchema = new mongoose.Schema({
@@ -11,12 +15,15 @@ const machineSchema = new mongoose.Schema({
   manufacturer:      { type: String, required: true },
   model:             { type: String, required: true },
   installation_date: { type: Date,   required: true },
-  location:          { type: String, required: true }
+  location:          { type: String, required: true },
+  power:             { type: Boolean, required: true}
 }, { _id: false });
 
 const staticDataSchema = new mongoose.Schema({
   rooms:    { type: [roomSchema],    default: [] },
   machines: { type: [machineSchema], default: [] }
+}, {
+  timestamps: true
 });
 
 module.exports = mongoose.model('StaticData', staticDataSchema);
