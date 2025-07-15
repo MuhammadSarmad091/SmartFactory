@@ -3,6 +3,7 @@
 const mongoose = require('mongoose');
 
 const roomSchema = new mongoose.Schema({
+  name:              { type: String, required: true },
   light_1: { type: Boolean, required: true, default: false },
   light_2: { type: Boolean, required: true, default: false }
 }, { _id: false });
