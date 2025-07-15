@@ -1,8 +1,9 @@
-const express = require('express');
-const router  = express.Router();
-const Sale    = require('../models/Sale');
-const Cartons = require('../models/CartonsAddition');
-const StaticData = require('../models/StaticData');
+// routes/transactions.js
+const express   = require('express');
+const router    = express.Router();
+const Sale      = require('../models/Sale');
+const Cartons   = require('../models/CartonsAddition');
+const Warehouse = require('../models/Warehouse');
 const authenticateToken = require('../middleware/auth');
 
 // POST /tx/sale — add a sale and decrement cartons
@@ -12,10 +13,11 @@ router.post('/sale', /*authenticateToken,*/ async (req, res) => {
     return res.status(400).send('Invalid fields');
   }
   try {
-    const staticDoc = await StaticData.findOne();
-    if (!staticDoc || staticDoc.cartons_num < cartons_sold) {
+    let wh = await Warehouse.findOne();
+    if (!wh || wh.cartons_num < cartons_sold) {
       return res.status(400).send('Insufficient cartons');
     }
+
     const sale = new Sale({
       cartons_sold,
       DateTime: new Date(DateTime),
@@ -23,8 +25,8 @@ router.post('/sale', /*authenticateToken,*/ async (req, res) => {
     });
     await sale.save();
 
-    staticDoc.cartons_num -= cartons_sold;
-    await staticDoc.save();
+    wh.cartons_num -= cartons_sold;
+    await wh.save();
 
     res.json(sale);
   } catch (err) {
@@ -46,13 +48,14 @@ router.post('/cartons', /*authenticateToken,*/ async (req, res) => {
     });
     await addition.save();
 
-    const staticDoc = await StaticData.findOneAndUpdate(
+    // increment (or create) the single Warehouse doc
+    const wh = await Warehouse.findOneAndUpdate(
       {},
       { $inc: { cartons_num: cartons_produced } },
       { new: true, upsert: true }
     );
 
-    res.json({ addition, cartons_num: staticDoc.cartons_num });
+    res.json({ addition, cartons_num: wh.cartons_num });
   } catch (err) {
     console.error(err);
     res.status(500).send('Error adding cartons');
