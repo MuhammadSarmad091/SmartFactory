@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 
 const roomSchema = new mongoose.Schema({
   // An array of light states (true = on, false = off)
+  name:              { type: String, required: true },
   lights: {
     type: [Boolean],
     required: true,

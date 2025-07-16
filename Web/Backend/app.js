@@ -12,9 +12,6 @@ var sensorDataRouter = require('./routes/sensorData');
 var transactionsRouter = require('./routes/transactions')
 const toggleRouter = require('./routes/toggle');
 
-
-
-
 var app = express();
 
 mongoose.connect(process.env.MONGO_URI, {
