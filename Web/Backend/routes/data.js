@@ -110,4 +110,106 @@ router.get('/warehouse', authenticateToken, async (req, res) => {
   }
 });
 
+
+//Analytics Routes
+router.get('/analytics/week', authenticateToken, async (req, res) => {
+  try {
+    const today = new Date();
+    const weekAgo = new Date();
+    weekAgo.setDate(today.getDate() - 6);
+    weekAgo.setHours(0,0,0,0);
+
+    // Helper to build an array of dates (YYYY-MM-DD) from weekAgo → today
+    const dates = Array.from({ length: 7 }).map((_, i) => {
+      const d = new Date(weekAgo);
+      d.setDate(weekAgo.getDate() + i);
+      return d.toISOString().slice(0,10);
+    });
+
+    // Aggregate cartons_produced by day
+    const prodAgg = await Cartons.aggregate([
+      { $match: { DateTime: { $gte: weekAgo } } },
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$DateTime" } },
+          total: { $sum: "$cartons_produced" }
+        }
+      }
+    ]);
+
+    // Aggregate cartons_sold by day
+    const soldAgg = await Sale.aggregate([
+      { $match: { DateTime: { $gte: weekAgo } } },
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$DateTime" } },
+          total: { $sum: "$cartons_sold" }
+        }
+      }
+    ]);
+
+    // Map results onto the 7-day window, defaulting to 0
+    const cartons_production_week = dates.map(d =>
+      (prodAgg.find(x => x._id === d)?.total) || 0
+    );
+    const sales_num_week = dates.map(d =>
+      (soldAgg.find(x => x._id === d)?.total) || 0
+    );
+
+    res.json({ cartons_production_week, sales_num_week });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error fetching weekly analytics');
+  }
+});
+
+// GET /data/analytics/month
+// Returns cartons produced & sold for each of the past 30 days
+router.get('/analytics/month', authenticateToken, async (req, res) => {
+  try {
+    const today = new Date();
+    const monthAgo = new Date();
+    monthAgo.setDate(today.getDate() - 29);
+    monthAgo.setHours(0,0,0,0);
+
+    const dates = Array.from({ length: 30 }).map((_, i) => {
+      const d = new Date(monthAgo);
+      d.setDate(monthAgo.getDate() + i);
+      return d.toISOString().slice(0,10);
+    });
+
+    const prodAgg = await Cartons.aggregate([
+      { $match: { DateTime: { $gte: monthAgo } } },
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$DateTime" } },
+          total: { $sum: "$cartons_produced" }
+        }
+      }
+    ]);
+
+    const soldAgg = await Sale.aggregate([
+      { $match: { DateTime: { $gte: monthAgo } } },
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$DateTime" } },
+          total: { $sum: "$cartons_sold" }
+        }
+      }
+    ]);
+
+    const cartons_production_month = dates.map(d =>
+      (prodAgg.find(x => x._id === d)?.total) || 0
+    );
+    const sales_production_month = dates.map(d =>
+      (soldAgg.find(x => x._id === d)?.total) || 0
+    );
+
+    res.json({ cartons_production_month, sales_production_month });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error fetching monthly analytics');
+  }
+});
+
 module.exports = router;
