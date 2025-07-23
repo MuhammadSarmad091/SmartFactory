@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { LayoutDashboard, Cog, Building2, BarChart3, Factory, Gamepad2, AlertTriangle, X } from 'lucide-react';
 
 interface SidebarProps {
@@ -8,6 +8,8 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+  const location = useLocation();
+  
   const navItems = [
     { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { to: '/machines', icon: Cog, label: 'Machines' },
@@ -16,6 +18,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     { to: '/alerts', icon: AlertTriangle, label: 'Alerts' },
     { to: '/unity-model', icon: Gamepad2, label: 'Unity Model' },
   ];
+
+  const handleNavClick = () => {
+    // Close sidebar on mobile when navigating
+    if (window.innerWidth < 768) {
+      onClose();
+    }
+  };
 
   return (
     <div className={`
@@ -44,6 +53,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           <NavLink
             key={item.to}
             to={item.to}
+            onClick={handleNavClick}
             className={({ isActive }) =>
               `flex items-center px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors ${
                 isActive ? 'bg-blue-50 text-blue-600 border-r-2 border-blue-600' : ''

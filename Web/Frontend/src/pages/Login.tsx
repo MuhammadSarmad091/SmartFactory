@@ -84,6 +84,10 @@ const Login: React.FC = () => {
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
+
+        <div className="mt-6 text-center text-sm text-gray-600">
+          <p>Default credentials: admin / admin</p>
+        </div>
       </div>
     </div>
   );
