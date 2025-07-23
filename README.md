@@ -76,11 +76,11 @@ git clone https://github.com/MuhammadSarmad091/SmartFactory.git
 cd SmartFactory
 ```
 
-Create `.env` files in the following directories and add your environment variables:
+Create `.env` files in the following directories and add your environment variables `OR` Leave this step if you want to run locally:
 
 * `Backend/.env`
 * `Frontend/.env`
-`Leave this step if you want to run locally`
+
 
 ### Running the Services
 
