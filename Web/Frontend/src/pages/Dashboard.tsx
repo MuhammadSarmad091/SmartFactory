@@ -74,6 +74,7 @@ const Dashboard: React.FC = () => {
         <QuickStats
           title="Rooms Status"
           icon={Building2}
+          navigateTo="/rooms"
           items={rooms.map(room => ({
             name: room.name,
             status: room.temperature < 30 ? 'optimal' : room.temperature < 35 ? 'warning' : 'critical',
@@ -84,6 +85,7 @@ const Dashboard: React.FC = () => {
         <QuickStats
           title="Machine Status"
           icon={Zap}
+          navigateTo="/machines"
           items={machines.map(machine => ({
             name: machine.name,
             status: !machine.power ? 'offline' : (machine.maintenance && machine.maintenance.toLowerCase() !== 'normal operation') ? 'critical' : 'optimal',

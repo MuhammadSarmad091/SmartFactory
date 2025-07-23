@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { DivideIcon as LucideIcon } from 'lucide-react';
 
 interface QuickStatsItem {
@@ -12,14 +13,23 @@ interface QuickStatsProps {
   title: string;
   icon: LucideIcon;
   items: QuickStatsItem[];
+  navigateTo?: string;
 }
 
-const QuickStats: React.FC<QuickStatsProps> = ({ title, icon: Icon, items }) => {
+const QuickStats: React.FC<QuickStatsProps> = ({ title, icon: Icon, items, navigateTo }) => {
+  const navigate = useNavigate();
+
   const statusColors = {
     optimal: 'bg-green-100 text-green-800',
     warning: 'bg-yellow-100 text-yellow-800',
     critical: 'bg-red-100 text-red-800',
     offline: 'bg-gray-100 text-gray-800',
+  };
+
+  const handleItemClick = () => {
+    if (navigateTo) {
+      navigate(navigateTo);
+    }
   };
 
   return (
@@ -31,7 +41,13 @@ const QuickStats: React.FC<QuickStatsProps> = ({ title, icon: Icon, items }) => 
       
       <div className="space-y-3">
         {items.map((item, index) => (
-          <div key={index} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
+          <div 
+            key={index} 
+            className={`flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0 ${
+              navigateTo ? 'cursor-pointer hover:bg-gray-50 rounded-md px-2 -mx-2 transition-colors' : ''
+            }`}
+            onClick={handleItemClick}
+          >
             <div>
               <p className="font-medium text-gray-900">{item.name}</p>
               <p className="text-sm text-gray-600">{item.value}</p>
