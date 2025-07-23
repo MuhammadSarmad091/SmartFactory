@@ -5,7 +5,7 @@ const SensorData = require('../models/SensorData');
 // Uncommend these lines if you want authentication for updating sensors data
 //const authenticateToken = require('../middleware/auth');
 
-// PUT /data/update — replace entire sensor data document
+// PUT /sensorData — replace entire sensor data document
 router.put('/',/* authenticateToken,*/ async (req, res) => {
   const { rooms, machines } = req.body;
   if (!Array.isArray(rooms) || !Array.isArray(machines)) {
