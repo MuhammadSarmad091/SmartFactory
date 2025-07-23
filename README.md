@@ -91,7 +91,7 @@ Create `.env` files in the following directories and add your environment variab
    npm install
    npm start
    ```
-   If running locally, make sure that Express runs at port 3000.
+   If running locally, make sure that Express runs at port `3000`.
 2. **React Frontend**
 
    ```bash
