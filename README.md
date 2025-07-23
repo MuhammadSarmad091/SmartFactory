@@ -76,10 +76,10 @@ git clone https://github.com/MuhammadSarmad091/SmartFactory.git
 cd SmartFactory
 ```
 
-Create `.env` files in the following directories and add your environment variables `OR` Leave this step if you want to run locally:
+Create `.env` files in the following directories and add your environment variables:
 
-* `Backend/.env`
-* `Frontend/.env`
+* `Backend/.env`         Variables to add : `MONGO_URI` , `JWT_SECRET`
+* `Frontend/.env`        Variables to add : `VITE_API_BASE_URL`
 
 
 ### Running the Services
@@ -91,7 +91,6 @@ Create `.env` files in the following directories and add your environment variab
    npm install
    npm start
    ```
-   If running locally, make sure that Express runs at port `3000`.
 2. **React Frontend**
 
    ```bash
