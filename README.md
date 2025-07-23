@@ -64,7 +64,7 @@ This project builds a **Digital Twin** of a smart factory, featuring:
 ### Prerequisites
 
 * Node.js (v16 or higher)
-* npm or yarn
+* npm
 * Python (v3.8 or higher)
 * Unity Editor (for WebGL build)
 
@@ -72,30 +72,30 @@ This project builds a **Digital Twin** of a smart factory, featuring:
 
 ```bash
 # Clone the repository
-git clone https://github.com/<your-username>/digital-twin-smart-factory.git
-cd digital-twin-smart-factory
+git clone https://github.com/MuhammadSarmad091/SmartFactory.git
+cd SmartFactory
 ```
 
-Create `.env` files in the following directories and add your environment variables:
+Create `.env` files in the following directories and add your environment variables `OR` Leave this step if you want to run locally:
 
-* `server/.env`
-* `ai-model/.env`
+* `Backend/.env`
+* `Frontend/.env`
 
 ### Running the Services
 
 1. **Express.js Backend**
 
    ```bash
-   cd server
+   cd Backend
    npm install
    npm start
    ```
 2. **React Frontend**
 
    ```bash
-   cd client
+   cd Frontend
    npm install
-   npm start
+   npm run dev
    ```
 3. **FastAPI AI Server**
 
