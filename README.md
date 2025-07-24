@@ -101,7 +101,7 @@ Create `.env` files in the following directories and add your environment variab
 3. **FastAPI AI Server**
 
    ```bash
-   cd ai-model
+   cd AI_model
    pip install -r requirements.txt
    uvicorn main:app --reload --host 0.0.0.0 --port 8000
    ```
