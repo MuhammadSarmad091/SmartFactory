@@ -15,9 +15,6 @@ A comprehensive Digital Twin system for simulating, monitoring, and predicting t
   - [Installation](#installation)
   - [Running the Services](#running-the-services)
 - [Folder Structure](#folder-structure)
-- [Future Enhancements](#future-enhancements)
-- [Contributing](#contributing)
-- [License](#license)
 
 ---
 
@@ -78,8 +75,9 @@ cd SmartFactory
 
 Create `.env` files in the following directories and add your environment variables:
 
-* `Backend/.env`         Variables to add : `MONGO_URI` , `JWT_SECRET`
-* `Frontend/.env`        Variables to add : `VITE_API_BASE_URL`
+* `Web/Backend/.env`         Variables to add : `MONGO_URI` , `JWT_SECRET`
+* `Web/Frontend/.env`        Variables to add : `VITE_API_BASE_URL` (Express Backend API URL)
+* `Data_generation/.env`     Variables to add : `AI_API_BASE_URL` , `BACKEND_API_BASE_URL`
 
 
 ### Running the Services
@@ -107,17 +105,17 @@ Create `.env` files in the following directories and add your environment variab
    ```
 4. **IoT Simulator**
 
-   * **Node‑RED**: Import `simulation/flow.json` and run
    * **Python**:
 
      ```bash
-     cd simulation
-     python simulate.py
+     cd Data_generation
+     pip install python-dotenv
+     python testing_data_generation.py
      ```
 5. **Unity WebGL Build**
 
    * Export the Unity project as a WebGL build
-   * Copy build output into `client/public/unity/`
+   * Copy build output into `Web/Frontend/public/unity/`
    * The React app will automatically load it
 
 ---
@@ -125,41 +123,14 @@ Create `.env` files in the following directories and add your environment variab
 ## Folder Structure
 
 ```
-digital-twin-smart-factory/
-├── client/           # React frontend
-│   └── public/unity/ # Unity WebGL build assets
-├── server/           # Express.js backend
-├── ai-model/         # FastAPI server & ML models
-├── simulation/       # Node‑RED flows & Python scripts
+SmartFactory/
+├── Web/           
+│   └── Backend/   # Express backend
+│   └── Frontend/     # React frontend
+├── Data_generation/           # IOT Simulation
+├── AI_model/         # FastAPI ML model
 └── unity/            # Unity project source
 ```
 
----
 
-## Future Enhancements
 
-* Integrate an **MQTT Broker** for real-world IoT devices
-* Enable **remote control** commands from dashboard to Unity
-* Add **advanced analytics** with Grafana or Plotly
-* Implement **WebSocket** for bi-directional real-time updates
-
----
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/YourFeature`)
-3. Commit your changes (`git commit -m "Add YourFeature"`)
-4. Push to the branch (`git push origin feature/YourFeature`)
-5. Open a Pull Request
-
-Please review the [Code of Conduct](CODE_OF_CONDUCT.md) before contributing.
-
----
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-```
-```
