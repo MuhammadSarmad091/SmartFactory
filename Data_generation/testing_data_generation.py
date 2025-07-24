@@ -2,9 +2,25 @@ import time
 import random
 import requests
 import datetime
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+ai_api_url = os.getenv("AI_API_BASE_URL")
+backend_api_url = os.getenv("BACKEND_API_BASE_URL")
+
 
 # Fixed companies array for random selection
-companies = ["CompanyA", "CompanyB", "CompanyC", "CompanyD"]
+companies = [
+    "AquaPure Distributors",
+    "HydroWave Retailers",
+    "CrystalClear Beverages",
+    "EcoSip Packaging",
+    "UrbanSpring Bottling Co.",
+    "BlueDrop Traders",
+    "FreshFlow Retail Pvt Ltd"
+]
 num_random_updates = 50
 random_updates_count = 50
 
@@ -123,7 +139,7 @@ def send_random_updates():
             "cartons_produced": cartons_produced,
             "DateTime": datetime.datetime.now().isoformat()
         }
-        response = requests.post("https://model-deployed-production.up.railway.app/tx/cartons", json=update)
+        response = requests.post(f"{backend_api_url}/tx/cartons", json=update)
         if response.status_code != 200:
             print(f"Failed to send cartons update: {response.status_code} - {response.text}")
     
@@ -134,7 +150,7 @@ def send_random_updates():
             "DateTime": datetime.datetime.now().isoformat(),
             "Buyer": random.choice(companies)
         }
-        response = requests.post("https://model-deployed-production.up.railway.app/tx/sale", json=update)
+        response = requests.post(f"{backend_api_url}/tx/sale", json=update)
         if response.status_code != 200:
             print(f"Failed to send sale update: {response.status_code} - {response.text}")
 
@@ -147,7 +163,7 @@ def main():
         machines_input = [{"temperature": m["temperature"], "vibration": m["vibration"],
                           "power_usage": m["power_usage"], "production_speed": m["production_speed"],
                           "noise_level": m["noise_level"]} for m in data["machines"]]
-        response = requests.post("https://smart-factory-ai-production.up.railway.app/predict", json=machines_input)
+        response = requests.post(f"{ai_api_url}/predict", json=machines_input)
         if response.status_code == 200:
             maintenance_predictions = response.json()
             for machine, prediction in zip(data["machines"], maintenance_predictions):
@@ -163,7 +179,7 @@ def main():
                           "power_usage": m["power_usage"], "noise_level": m["noise_level"],
                           "maintenance": m["maintenance"]} for m in data["machines"]]
         }
-        response = requests.put("https://model-deployed-production.up.railway.app/sensorData/", json=update_data)
+        response = requests.put(f"{backend_api_url}/sensorData/", json=update_data)
         if response.status_code == 200:
             print("Data updated successfully")
         else:
