@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Cog, Building2, BarChart3, Factory, Gamepad2, AlertTriangle, X } from 'lucide-react';
+import { LayoutDashboard, Cog, Building2, BarChart3, Factory, Gamepad2, AlertTriangle, X, Mic } from 'lucide-react';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -9,7 +9,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const location = useLocation();
-  
+
   const navItems = [
     { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { to: '/machines', icon: Cog, label: 'Machines' },
@@ -17,6 +17,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     { to: '/analytics', icon: BarChart3, label: 'Analytics' },
     { to: '/alerts', icon: AlertTriangle, label: 'Alerts' },
     { to: '/unity-model', icon: Gamepad2, label: 'Unity Model' },
+    { to: '/voice-assistant', icon: Mic, label: 'Voice Assistant' },
   ];
 
   const handleNavClick = () => {
@@ -47,7 +48,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           </button>
         </div>
       </div>
-      
+
       <nav className="mt-6">
         {navItems.map((item) => (
           <NavLink

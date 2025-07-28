@@ -11,6 +11,7 @@ import Analytics from './pages/Analytics';
 import UnityModel from './pages/UnityModel';
 import Alerts from './pages/Alerts';
 import ProtectedRoute from './components/ProtectedRoute';
+import VoiceAssistant from './pages/VoiceAssistant'; // Import the VoiceAssistant component
 
 function App() {
   return (
@@ -32,7 +33,7 @@ function App() {
                         <Route path="/analytics" element={<Analytics />} />
                         <Route path="/unity-model" element={<UnityModel />} />
                         <Route path="/alerts" element={<Alerts />} />
-                        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                        <Route path="/voice-assistant" element={<VoiceAssistant />} />
                       </Routes>
                     </Layout>
                   </ProtectedRoute>
