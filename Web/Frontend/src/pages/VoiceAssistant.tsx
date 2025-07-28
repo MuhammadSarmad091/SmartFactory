@@ -267,34 +267,7 @@ const VoiceAssistant: React.FC = () => {
 
         {/* Usage Instructions */}
         <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6 sm:p-8 border border-blue-100">
-          <h3 className="text-xl sm:text-2xl font-semibold text-blue-800 mb-4 flex items-center">
-            <div className="bg-blue-500 p-2 rounded-lg mr-3">
-              <MessageCircle className="text-white" size={20} />
-            </div>
-            How to Use
-          </h3>
-          <div className="grid sm:grid-cols-2 gap-4">
-            <div className="space-y-3">
-              <div className="flex items-start space-x-3">
-                <div className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-0.5">1</div>
-                <p className="text-blue-700">Use voice input by clicking the microphone and speaking your question</p>
-              </div>
-              <div className="flex items-start space-x-3">
-                <div className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-0.5">2</div>
-                <p className="text-blue-700">Or type your question in the text input field</p>
-              </div>
-            </div>
-            <div className="space-y-3">
-              <div className="flex items-start space-x-3">
-                <div className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-0.5">3</div>
-                <p className="text-blue-700">Ask about machine status, temperature, maintenance, and production data</p>
-              </div>
-              <div className="flex items-start space-x-3">
-                <div className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-0.5">4</div>
-                <p className="text-blue-700">Listen to audio responses or replay them anytime</p>
-              </div>
-            </div>
-          </div>
+          
           <div className="mt-6 p-4 bg-white rounded-xl border border-blue-200">
             <h4 className="font-semibold text-blue-800 mb-2">Example Questions:</h4>
             <div className="flex flex-wrap gap-2">
