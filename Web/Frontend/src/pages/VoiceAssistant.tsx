@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Mic, MicOff, Send, Volume2, Loader } from 'lucide-react';
+import { Mic, MicOff, Send, Volume2, Loader, MessageCircle, Headphones } from 'lucide-react';
 
 const VoiceAssistant: React.FC = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -136,112 +136,179 @@ const VoiceAssistant: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-4 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8 sm:mb-12">
+          <div className="flex justify-center items-center mb-4">
+            <div className="bg-gradient-to-br from-blue-500 to-purple-600 p-3 rounded-full shadow-lg">
+              <MessageCircle className="text-white" size={32} />
+            </div>
+          </div>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
             Smart Factory Voice Assistant
           </h1>
-          
-          {/* Audio Input Section */}
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-700 mb-4">Voice Input</h2>
-            <div className="flex justify-center">
-              <button
-                onClick={isRecording ? stopRecording : startRecording}
-                disabled={isLoading}
-                className={`flex items-center space-x-2 px-6 py-3 rounded-full text-white font-medium transition-colors ${
-                  isRecording
-                    ? 'bg-red-500 hover:bg-red-600'
-                    : 'bg-blue-500 hover:bg-blue-600'
-                } disabled:opacity-50 disabled:cursor-not-allowed`}
-              >
-                {isRecording ? (
-                  <>
-                    <MicOff size={20} />
-                    <span>Stop Recording</span>
-                  </>
-                ) : (
-                  <>
-                    <Mic size={20} />
-                    <span>Start Recording</span>
-                  </>
-                )}
-              </button>
+          <p className="text-gray-600 text-lg sm:text-xl max-w-2xl mx-auto">
+            Ask questions about your factory operations using voice or text
+          </p>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 mb-8">
+          {/* Voice Input Section */}
+          <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 border border-gray-100">
+            <div className="flex items-center mb-6">
+              <Headphones className="text-blue-500 mr-3" size={24} />
+              <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">Voice Input</h2>
             </div>
-            {isRecording && (
-              <p className="text-center text-red-500 mt-2 font-medium">
-                Recording... Click stop when done
-              </p>
-            )}
+            
+            <div className="flex flex-col items-center space-y-6">
+              <div className={`relative ${isRecording ? 'animate-pulse' : ''}`}>
+                <button
+                  onClick={isRecording ? stopRecording : startRecording}
+                  disabled={isLoading}
+                  className={`relative w-20 h-20 sm:w-24 sm:h-24 rounded-full text-white font-medium transition-all duration-300 transform hover:scale-105 shadow-2xl ${
+                    isRecording
+                      ? 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700'
+                      : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700'
+                  } disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none`}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+  {isRecording ? <MicOff size={28} /> : <Mic size={28} />}
+</div>
+                  {isRecording && (
+                    <div className="absolute inset-0 rounded-full bg-red-400 animate-ping opacity-25"></div>
+                  )}
+                </button>
+              </div>
+              
+              <div className="text-center">
+                <p className={`text-lg font-medium ${isRecording ? 'text-red-600' : 'text-gray-700'}`}>
+                  {isRecording ? 'Recording... Click to stop' : 'Click to start recording'}
+                </p>
+                <p className="text-sm text-gray-500 mt-1">
+                  Speak clearly for best results
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Text Input Section */}
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-700 mb-4">Text Input</h2>
-            <form onSubmit={handleTextSubmit} className="flex space-x-2">
-              <input
-                type="text"
-                value={textInput}
-                onChange={(e) => setTextInput(e.target.value)}
-                placeholder="Type your question about the factory..."
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                disabled={isLoading}
-              />
+          <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 border border-gray-100">
+            <div className="flex items-center mb-6">
+              <MessageCircle className="text-green-500 mr-3" size={24} />
+              <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">Text Input</h2>
+            </div>
+            
+            <form onSubmit={handleTextSubmit} className="space-y-4">
+              <div className="relative">
+                <textarea
+                  value={textInput}
+                  onChange={(e) => setTextInput(e.target.value)}
+                  placeholder="Type your question about the factory..."
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all duration-200"
+                  disabled={isLoading}
+                  rows={4}
+                />
+              </div>
               <button
                 type="submit"
                 disabled={isLoading || !textInput.trim()}
-                className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                className="w-full px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 font-medium transition-all duration-200 transform hover:scale-105 disabled:transform-none shadow-lg"
               >
                 <Send size={20} />
-                <span>Send</span>
+                <span>Send Message</span>
               </button>
             </form>
           </div>
+        </div>
 
-          {/* Loading Indicator */}
-          {isLoading && (
-            <div className="flex justify-center items-center mb-6">
-              <Loader className="animate-spin text-blue-500" size={24} />
-              <span className="ml-2 text-gray-600">Processing...</span>
+        {/* Loading Indicator */}
+        {isLoading && (
+          <div className="flex justify-center items-center mb-8">
+            <div className="bg-white rounded-2xl shadow-xl px-8 py-6 flex items-center space-x-4">
+              <Loader className="animate-spin text-blue-500" size={28} />
+              <span className="text-gray-700 text-lg font-medium">Processing your request...</span>
             </div>
-          )}
+          </div>
+        )}
 
-          {/* Response Section */}
-          {response && (
-            <div className="bg-gray-50 rounded-lg p-6">
-              <div className="flex justify-between items-start mb-4">
-                <h2 className="text-xl font-semibold text-gray-700">Assistant Response</h2>
-                {audioUrl && (
-                  <button
-                    onClick={playAudio}
-                    className="flex items-center space-x-2 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600"
-                  >
-                    <Volume2 size={20} />
-                    <span>Replay Audio</span>
-                  </button>
-                )}
-              </div>
-              <p className="text-gray-800 text-lg leading-relaxed">{response}</p>
+        {/* Response Section */}
+        {response && (
+          <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 border border-gray-100 mb-8">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-6 space-y-4 sm:space-y-0">
+              <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 flex items-center">
+                <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-2 rounded-lg mr-3">
+                  <MessageCircle className="text-white" size={20} />
+                </div>
+                Assistant Response
+              </h2>
               {audioUrl && (
-                <audio
-                  ref={audioRef}
-                  src={audioUrl}
-                  className="hidden"
-                />
+                <button
+                  onClick={playAudio}
+                  className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl hover:from-purple-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
+                >
+                  <Volume2 size={20} />
+                  <span>Replay Audio</span>
+                </button>
               )}
             </div>
-          )}
+            <div className="bg-gray-50 rounded-xl p-6">
+              <p className="text-gray-800 text-lg leading-relaxed">{response}</p>
+            </div>
+            {audioUrl && (
+              <audio
+                ref={audioRef}
+                src={audioUrl}
+                className="hidden"
+              />
+            )}
+          </div>
+        )}
 
-          {/* Usage Instructions */}
-          <div className="mt-8 bg-blue-50 rounded-lg p-4">
-            <h3 className="text-lg font-semibold text-blue-800 mb-2">How to use:</h3>
-            <ul className="text-blue-700 space-y-1">
-              <li>• Use voice input by clicking "Start Recording" and speak your question</li>
-              <li>• Or type your question in the text input field</li>
-              <li>• Ask about machine status, temperature, maintenance, production data, etc.</li>
-              <li>• Examples: "What is the temperature of the Furnace?", "Which machines need maintenance?"</li>
-            </ul>
+        {/* Usage Instructions */}
+        <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6 sm:p-8 border border-blue-100">
+          <h3 className="text-xl sm:text-2xl font-semibold text-blue-800 mb-4 flex items-center">
+            <div className="bg-blue-500 p-2 rounded-lg mr-3">
+              <MessageCircle className="text-white" size={20} />
+            </div>
+            How to Use
+          </h3>
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div className="space-y-3">
+              <div className="flex items-start space-x-3">
+                <div className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-0.5">1</div>
+                <p className="text-blue-700">Use voice input by clicking the microphone and speaking your question</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-0.5">2</div>
+                <p className="text-blue-700">Or type your question in the text input field</p>
+              </div>
+            </div>
+            <div className="space-y-3">
+              <div className="flex items-start space-x-3">
+                <div className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-0.5">3</div>
+                <p className="text-blue-700">Ask about machine status, temperature, maintenance, and production data</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-0.5">4</div>
+                <p className="text-blue-700">Listen to audio responses or replay them anytime</p>
+              </div>
+            </div>
+          </div>
+          <div className="mt-6 p-4 bg-white rounded-xl border border-blue-200">
+            <h4 className="font-semibold text-blue-800 mb-2">Example Questions:</h4>
+            <div className="flex flex-wrap gap-2">
+              {[
+                '"What is the temperature of the Furnace?"',
+                '"Which machines need maintenance?"',
+                '"Show production data for today"',
+                '"Are there any alerts?"'
+              ].map((example, index) => (
+                <span key={index} className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
+                  {example}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </div>
