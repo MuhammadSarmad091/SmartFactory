@@ -25,7 +25,7 @@ const UnityModel: React.FC = () => {
         
         <div className="relative" style={{ paddingBottom: '56.25%', height: 0 }}>
           <iframe
-            src="https://youtu.be/aSRehOcHgWM?si=m4zIgpRIx48PVMkh"
+            src="/unity/index.html"
             className="absolute top-0 left-0 w-full h-full border-0"
             title="Unity 3D Factory Model"
             allowFullScreen

@@ -14,7 +14,7 @@ const VoiceAssistant: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const hasAutoPlayed = useRef<boolean>(false);
 
-  const API_BASE_URL = 'https://web-production-5227.up.railway.app';
+  const API_BASE_URL = 'https://smartfactoryvoiceassistant-production.up.railway.app';
 
   // Auto-play audio when audioUrl changes
   useEffect(() => {
