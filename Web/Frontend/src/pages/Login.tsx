@@ -18,8 +18,8 @@ const Login: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
-
-    const success = await login(username, password);
+    var tUsername = username.trim();
+    const success = await login(tUsername, password);
     if (!success) {
       setError('Invalid credentials. Please try again.');
     }
