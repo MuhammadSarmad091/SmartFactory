@@ -1,6 +1,5 @@
-
 import React, { useState, useRef, useEffect } from 'react';
-import { Mic, MicOff, Send, Volume2, Loader, MessageCircle, Headphones } from 'lucide-react';
+import { Mic, MicOff, Send, Volume2, Loader, MessageCircle, Headphones } from 'lucide-react'; // Removed LogIn, LogOut icons
 
 const VoiceAssistant: React.FC = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -8,13 +7,18 @@ const VoiceAssistant: React.FC = () => {
   const [response, setResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
-  
+  // Token state still reads from localStorage
+  const [token, setToken] = useState<string | null>(localStorage.getItem('factory_token')); 
+
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const audioRef = useRef<HTMLAudioElement>(null);
   const hasAutoPlayed = useRef<boolean>(false);
 
-  const API_BASE_URL = 'https://smartfactoryvoiceassistant-production.up.railway.app';
+  // IMPORTANT: Replace with your deployed Flask app's URL
+  const FLASK_API_BASE_URL = 'https://smartfactoryvoiceassistant-production.up.railway.app';
+  // MERN_AUTH_API_URL is no longer needed here as login UI is removed.
+  // The Flask app will use its configured MERN API URL for actions.
 
   // Auto-play audio when audioUrl changes
   useEffect(() => {
@@ -26,8 +30,23 @@ const VoiceAssistant: React.FC = () => {
     }
   }, [audioUrl]);
 
+  // Effect to save/remove token from local storage
+  // This remains to keep the token synchronized with localStorage
+  useEffect(() => {
+    if (token) {
+      localStorage.setItem('factory_token', token);
+    } else {
+      localStorage.removeItem('factory_token');
+    }
+  }, [token]);
+
+  // --- Voice Input Logic ---
   const startRecording = async () => {
     try {
+      setResponse(''); // Clear previous response
+      setAudioUrl(null); // Clear previous audio
+      hasAutoPlayed.current = false; // Reset autoplay flag
+
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder;
@@ -66,57 +85,76 @@ const VoiceAssistant: React.FC = () => {
       const formData = new FormData();
       formData.append('audio', audioBlob, 'audio.wav');
 
-      const response = await fetch(`${API_BASE_URL}/transcribe`, {
+      const res = await fetch(`${FLASK_API_BASE_URL}/transcribe`, {
         method: 'POST',
         body: formData,
       });
 
-      if (!response.ok) {
+      if (!res.ok) {
         throw new Error('Transcription failed');
       }
 
-      const data = await response.json();
+      const data = await res.json();
       setTextInput(data.text);
       
       // Automatically process the transcribed text
       await processCommand(data.text);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error transcribing audio:', error);
-      alert('Error transcribing audio. Please try again.');
+      setResponse(`Error transcribing audio: ${error.message}. Please try again.`);
     } finally {
       setIsLoading(false);
     }
   };
 
+  // --- Command Processing Logic (sends token to Flask) ---
   const processCommand = async (text: string) => {
     if (!text.trim()) return;
 
     setIsLoading(true);
-    // Reset auto-play flag for new response
-    hasAutoPlayed.current = false;
+    setResponse(''); // Clear previous response
+    setAudioUrl(null); // Clear previous audio
+    hasAutoPlayed.current = false; // Reset autoplay flag
     
     try {
-      const response = await fetch(`${API_BASE_URL}/process_command`, {
+      const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+      };
+      // Always send Authorization header if a token exists in localStorage
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      } else {
+        // If no token is found, inform the user that actions requiring auth might fail
+        setResponse('No authentication token found. Some actions may require you to be logged into the main dashboard.');
+      }
+
+      const res = await fetch(`${FLASK_API_BASE_URL}/process_command`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers, // Use the dynamically built headers
         body: JSON.stringify({ text }),
       });
 
-      if (!response.ok) {
-        throw new Error('Command processing failed');
+      if (!res.ok) {
+        const errorData = await res.json();
+        // Handle 401/403 specifically to inform about authentication for actions
+        if (res.status === 401 || res.status === 403) {
+          setResponse('This action requires authentication. Please ensure you are logged into the main dashboard.');
+          // Do NOT clear the token here, as it might be valid for other parts of the app
+          // and the user is expected to log in via the dashboard.
+          return; // Stop further processing
+        }
+        throw new Error(errorData.error || 'Command processing failed');
       }
 
-      const data = await response.json();
+      const data = await res.json();
       setResponse(data.response);
       
       if (data.audio_url) {
-        setAudioUrl(`${API_BASE_URL}${data.audio_url}`);
+        setAudioUrl(`${FLASK_API_BASE_URL}${data.audio_url}`);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error processing command:', error);
-      setResponse('Sorry, I could not process your request. Please try again.');
+      setResponse(`Sorry, I could not process your request: ${error.message}. Please try again.`);
     } finally {
       setIsLoading(false);
     }
@@ -125,6 +163,15 @@ const VoiceAssistant: React.FC = () => {
   const handleTextSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     processCommand(textInput);
+  };
+
+  // handleKeyDown function for Enter/Shift+Enter
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleTextSubmit(e);
+    }
+    // Shift+Enter will naturally create a new line, no explicit action needed.
   };
 
   const playAudio = () => {
@@ -153,6 +200,9 @@ const VoiceAssistant: React.FC = () => {
           </p>
         </div>
 
+        {/* Removed Login Section */}
+        {/* The login functionality is now handled by the main dashboard. */}
+
         <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 mb-8">
           {/* Voice Input Section */}
           <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 border border-gray-100">
@@ -173,8 +223,8 @@ const VoiceAssistant: React.FC = () => {
                   } disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none`}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-  {isRecording ? <MicOff size={28} /> : <Mic size={28} />}
-</div>
+                    {isRecording ? <MicOff size={28} /> : <Mic size={28} />}
+                  </div>
                   {isRecording && (
                     <div className="absolute inset-0 rounded-full bg-red-400 animate-ping opacity-25"></div>
                   )}
@@ -204,6 +254,7 @@ const VoiceAssistant: React.FC = () => {
                 <textarea
                   value={textInput}
                   onChange={(e) => setTextInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
                   placeholder="Type your question about the factory..."
                   className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all duration-200"
                   disabled={isLoading}
@@ -275,7 +326,10 @@ const VoiceAssistant: React.FC = () => {
                 '"What is the temperature of the Furnace?"',
                 '"Which machines need maintenance?"',
                 '"Show production data for today"',
-                '"Are there any alerts?"'
+                '"Are there any alerts?"',
+                '"Turn on light one in the Machine Room."', // New example
+                '"Record a sale of 50 cartons to John Doe."', // New example
+                '"Stop the Labeller."' // New example
               ].map((example, index) => (
                 <span key={index} className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
                   {example}
