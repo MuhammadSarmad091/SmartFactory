@@ -145,9 +145,20 @@ const VoiceAssistant: React.FC = () => {
               <MessageCircle className="text-white" size={32} />
             </div>
           </div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-            Smart Factory Voice Assistant
-          </h1>
+            <h1
+    className="
+      text-3xl sm:text-4xl lg:text-5xl 
+      leading-relaxed 
+      pb-2           /* try 4 or even pb-6 */
+      font-bold 
+      bg-gradient-to-r from-blue-600 to-purple-600 
+      bg-clip-text text-transparent 
+      mb-2 
+      overflow-visible
+    "
+  >
+    Smart Factory Voice Assistant
+  </h1>
           <p className="text-gray-600 text-lg sm:text-xl max-w-2xl mx-auto">
             Ask questions about your factory operations using voice or text
           </p>
