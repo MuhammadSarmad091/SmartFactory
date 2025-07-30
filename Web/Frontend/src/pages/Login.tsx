@@ -111,7 +111,7 @@ const Login: React.FC = () => {
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <User className="h-4 w-4 text-slate-400" />
+                <User className="h-4 w-4 text-slate-2000" />
               </div>
               <input
                 type="text"
@@ -129,12 +129,12 @@ const Login: React.FC = () => {
             className="space-y-2"
             style={{ animation: 'fadeInUp 0.6s ease-out 0.8s both' }}
           >
-            <label className="block text-sm font-semibold text-slate-700">
+            <label className="block text-sm font-semibold text-slate-2000">
               Password
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Lock className="h-4 w-4 text-slate-400" />
+                <Lock className="h-4 w-4 text-slate-900" />
               </div>
               <input
                 type={showPassword ? 'text' : 'password'}
